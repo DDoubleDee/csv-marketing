@@ -32,6 +32,10 @@ def connectdb(engine):
 
 
 def tosql(engine, inp):
+    mnt = ['Wines', 'Fruits', 'MeatProducts', 'FishProducts', 'SweetProducts', 'GoldProds']
+    for i in inp:
+        for i2 in mnt:
+            i['MostExpense'] = i['Mnt{0}'.format(i2)] if i['Mnt{0}'.format(i2)] > i['MostExpense']
     inp.to_sql('inputlist', con=engine, if_exists='replace')
     for i in ['Phd', 'Graduation', 'Master', '2n Cycle', 'Basic']:
         inp.loc[inp['Education'] == i].to_sql(i, con=engine, if_exists='replace')
