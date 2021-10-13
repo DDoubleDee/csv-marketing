@@ -12,6 +12,8 @@ def readcsv(csv):
         inp['AcceptedCmp{0}'.format(i)] = inp['AcceptedCmp{0}'.format(i)].astype('boolean')
     inp['Complain'] = inp['Complain'].astype('boolean')
     inp['Response'] = inp['Response'].astype('boolean')
+    inp['Education'] = inp['Education'].astype('category')
+    inp['Marital_Status'] = inp['Marital_Status'].astype('category')
     inp['Income'] = inp['Income'].astype('float')
     mnt = ['Wines', 'Fruits', 'MeatProducts', 'FishProducts', 'SweetProducts', 'GoldProds']
     for i in mnt:
@@ -33,14 +35,24 @@ def connectdb(engine):
 
 def tosql(engine, inp):
     mnt = ['Wines', 'Fruits', 'MeatProducts', 'FishProducts', 'SweetProducts', 'GoldProds']
-    for i in inp:
+    inp['MostExpense'] = 'one'
+    for i in range(2240):
+        comp = 0
         for i2 in mnt:
-            i['MostExpense'] = i['Mnt{0}'.format(i2)] if i['Mnt{0}'.format(i2)] > i['MostExpense']
+            if int(comp) < inp['Mnt{0}'.format(i2)][i]:
+                comp = inp['Mnt{0}'.format(i2)][i]
+                inp['MostExpense'][i] = i2
     inp.to_sql('inputlist', con=engine, if_exists='replace')
     for i in ['Phd', 'Graduation', 'Master', '2n Cycle', 'Basic']:
-        inp.loc[inp['Education'] == i].to_sql(i, con=engine, if_exists='replace')
+        i2 = inp.loc[inp['Education'] == i]
+        i2['foreign_key'] = i2['ID']
+        i2.drop(['ID'], axis=1)
+        i2.to_sql(i, con=engine, if_exists='replace')
     for i in ['Single', 'Married', 'Together', 'Divorced']:
-        inp.loc[inp['Marital_Status'] == i].to_sql(i, con=engine, if_exists='replace')
+        i2 = inp.loc[inp['Marital_Status'] == i]
+        i2['foreign_key'] = i2['ID']
+        i2.drop(['ID'], axis=1)
+        i2.to_sql(i, con=engine, if_exists='replace')
 
 
 def filtersql(metadata, engine, connection, filterinp=0):
