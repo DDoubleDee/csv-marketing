@@ -66,8 +66,6 @@ class Scripts:
         self.filedata['Education_key'] = 0
         self.filedata = self.filedata.apply(calculate_most_bought, axis=1)
         self.filedata = self.filedata.apply(add_foreign_keys, axis=1)
-        self.filedata.drop(['Education'], axis=1)
-        self.filedata.drop(['Marital_Status'], axis=1)
 
     # This uses pandas' to_sql() function to create and send three tables, or replace them if they exist
     def send_data_to_sql(self):
