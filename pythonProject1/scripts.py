@@ -76,7 +76,7 @@ class Scripts:
         self.marital_status_dataframe.to_sql('maritalstatuses', con=self.engine, if_exists='replace')
 
     # This uses sqlalchemy to query the database for the chosen filter type, pandas' read_sql_query()
-    # in order to instantly recieve a dataframe that is then written to a xslx file using to_excel()
+    # in order to instantly recieve a dataframe that is then written to a xlsx file using to_excel()
     def query_sql(self, filterqueryid=0):
         table = db.Table('list', self.metadata, autoload=True, autoload_with=self.engine)   # Load table difinition from db
         query = db.select([table])  # Setup default query in case filterqueryid is a weird number
